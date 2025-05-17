@@ -1,13 +1,26 @@
 #include "Stage.h"
 #include "DxLib.h"
+#include <cstdlib>
+#include <ctime>
+#include <vector>
 
-static const int STAGE_X = 7;
-static const int STAGE_Y = 7;
-static const int MARGIN_HOR = 100; // 左右の余白
-static const int MARGIN_VER = 100; // 上下の余白
+const int STAGE_X = 7;
+const int STAGE_Y = 7;
+const int MARGIN_HOR = 100; // 左右の余白
+const int MARGIN_VER = 100; // 上下の余白
+const int STAGE_CENTER = 40;
 
 Stage::Stage()
 {
+	Pieces.resize(STAGE_Y, std::vector<int>(STAGE_X,0));
+	srand((unsigned int)time(NULL));
+	for (int y = 0; y < STAGE_Y; y++)
+	{
+		for (int x = 0; x < STAGE_X; x++)
+		{
+			Pieces[y][x] = piece.RandPiece();
+		}
+	}
 }
 
 Stage::~Stage()
@@ -22,11 +35,45 @@ void Stage::Draw()
 		{
 			// 縦線を描く
 			int px = MARGIN_HOR + x * 80;
-			DrawLine(px, MARGIN_VER, px, MARGIN_VER + STAGE_Y * 80, GetColor(0, 0, 0));
+			DrawLine(px, MARGIN_VER, px, MARGIN_VER + STAGE_Y * 80, GetColor(255, 255, 255));
 
 			// 横線を描く
 			int py = MARGIN_VER + y * 80;
-			DrawLine(MARGIN_HOR, py, MARGIN_HOR + STAGE_X * 80, py, GetColor(0, 0, 0));
+			DrawLine(MARGIN_HOR, py, MARGIN_HOR + STAGE_X * 80, py, GetColor(255, 255, 255));
+		}
+	}
+
+	for (int y = 0; y < STAGE_Y; y++)
+	{
+		for (int x = 0; x < STAGE_X; x++)
+		{
+			//NONE = 0,GREEN = 1,RED = 2,BLUE = 3,YELLOW = 4,PURPLE = 5,
+			switch (Pieces[y][x])
+			{
+			case 0:
+				break;
+
+			case 1:
+				DrawCircle(MARGIN_HOR + STAGE_CENTER + 80 * x, MARGIN_VER + STAGE_CENTER + 80 * y,
+					30, pGREEN, TRUE);
+				break;
+			case 2:
+				DrawCircle(MARGIN_HOR + STAGE_CENTER + 80 * x, MARGIN_VER + STAGE_CENTER + 80 * y,
+					30, pRED, TRUE);
+				break;
+			case 3:
+				DrawCircle(MARGIN_HOR + STAGE_CENTER + 80 * x, MARGIN_VER + STAGE_CENTER + 80 * y,
+					30, pBLUE, TRUE);
+				break;
+			case 4:
+				DrawCircle(MARGIN_HOR + STAGE_CENTER + 80 * x, MARGIN_VER + STAGE_CENTER + 80 * y,
+					30, pYELLOW, TRUE);
+				break;
+			case 5:
+				DrawCircle(MARGIN_HOR + STAGE_CENTER + 80 * x, MARGIN_VER + STAGE_CENTER + 80 * y,
+					30, pPURPLE, TRUE);
+				break;
+			}
 		}
 	}
 }
