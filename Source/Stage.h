@@ -9,7 +9,12 @@ class Stage : public GameObject
 public:
 	Stage();
 	~Stage();
+	void Update() override;
 	void Draw() override;
+	void Match();
+	void FallPiece();
+	void SwapPiece();
+
 	Piece piece;
 	PieceColor pColor;
 public:
